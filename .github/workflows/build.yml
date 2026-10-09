@@ -151,7 +151,7 @@ jobs:
 
   sign-and-release:
     needs: build
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && inputs.release_tag != ''
 
     steps:
@@ -162,16 +162,25 @@ jobs:
 
       - name: Sign APK files
         run: |
-          printf '%s' "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-          KEY=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
           mkdir -p release-files
 
           find release -type f -name '*.apk' | while read apk; do
             cp "$apk" release-files/
-            gpg --batch --yes --local-user "$KEY" --detach-sign --output "release-files/$(basename "$apk").sig" "$apk"
           done
 
-          gpg --armor --export "$KEY" > release-files/v2rayN-public-key.asc
+          if [ -n "${{ secrets.GPG_PRIVATE_KEY }}" ]; then
+            printf '%s' "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+            KEY=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
+            mkdir -p release-files
+
+            find release -type f -name '*.apk' | while read apk; do
+              gpg --batch --yes --local-user "$KEY" --detach-sign --output "release-files/$(basename "$apk").sig" "$apk"
+            done
+
+            gpg --armor --export "$KEY" > release-files/v2rayN-public-key.asc
+          else
+            echo "GPG_PRIVATE_KEY not set; uploading APKs without .sig signatures."
+          fi
 
       - name: Upload APKs, signatures and public key to release
         uses: svenstaro/upload-release-action@v2
