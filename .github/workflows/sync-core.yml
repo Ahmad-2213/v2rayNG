@@ -1,0 +1,54 @@
+name: Sync core sources
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-core-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check latest core tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OFFICIAL_TAG=$(gh release view --repo 2dust/AndroidLibXrayLite --json tagName --jq .tagName)
+          echo "Official AndroidLibXrayLite latest: $OFFICIAL_TAG"
+          if gh release view --repo Ahmad-2213/AndroidLibXrayLite --json tagName --jq .tagName >/tmp/ahmad_tag.txt 2>/tmp/ahmad_err.txt; then
+            AHMAD_TAG=$(cat /tmp/ahmad_tag.txt)
+            echo "Ahmad AndroidLibXrayLite latest: $AHMAD_TAG"
+          else
+            echo "Ahmad AndroidLibXrayLite has no releases yet (or fork not built)."
+            cat /tmp/ahmad_err.txt
+            AHMAD_TAG=""
+          fi
+          XRAY_AHMAD_SHA=$(gh api repos/Ahmad-2213/Xray-core/commits/main --jq .sha)
+          echo "Ahmad Xray-core main SHA: $XRAY_AHMAD_SHA"
+          {
+            echo "OFFICIAL_TAG=$OFFICIAL_TAG"
+            echo "AHMAD_TAG=$AHMAD_TAG"
+            echo "XRAY_AHMAD_SHA=$XRAY_AHMAD_SHA"
+          } >> $GITHUB_ENV
+
+      - name: Open issue when Ahmad core is behind
+        if: env.AHMAD_TAG == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Ahmad core AAR has no release yet"
+          if [ -z "$(gh issue list --repo ${{ github.repository }} --search "$TITLE in:title" --json number --jq '.[0].number')" ]; then
+            gh issue create --repo ${{ github.repository }} \
+              --title "$TITLE" \
+              --body "Build the Ahmad core once so the in-app Core source selector can download it.
+
+          1. Build \`Ahmad-2213/AndroidLibXrayLite\` from \`Ahmad-2213/Xray-core@main\` (\`$XRAY_AHMAD_SHA\`) via gomobile and publish a \`libv2ray.aar\` GitHub release.
+          2. Then run: \`gh workflow run build.yml -f core_source=Ahmad-2213/AndroidLibXrayLite -f release_tag=v<app>-ahmad\`
+          3. Official core latest for reference: \`$OFFICIAL_TAG\`."
+          else
+            echo "Issue already exists, skipping."
+          fi

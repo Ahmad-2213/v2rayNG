@@ -173,6 +173,10 @@
     <string name="title_settings">設定</string>
     <string name="title_advanced">進階</string>
     <string name="title_core_settings">核心設定</string>
+    <string name="title_core_source">Core source</string>
+    <string name="summary_pref_core_source">Choose Official or Ahmad-2213 core. The core is baked into the APK at build time; installing an APK built with the other source is required to switch.</string>
+    <string name="title_core_built_in">Built-in core: %1$s</string>
+    <string name="title_core_open_releases">Open core releases page</string>
     <string name="title_vpn_settings">VPN 設定</string>
     <string name="title_pref_per_app_proxy">個別應用程式代理</string>
     <string name="summary_pref_per_app_proxy">一般：已勾選的應用程式使用代理，未勾選的應用程式直接連線；\n繞行模式：已勾選的應用程式直接連線，未勾選的應用程式使用代理。\n選單中可自動選取需要使用代理的應用程式。</string>

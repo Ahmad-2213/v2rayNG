@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,9 +34,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.AppConfig.VPN
+import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.extension.toastError
 import com.v2ray.ang.handler.AppLocaleManager
+import com.v2ray.ang.handler.CoreSourceManager
 import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.handler.MmkvManager.rememberMmkvBool
 import com.v2ray.ang.handler.MmkvManager.rememberMmkvString
@@ -108,6 +111,7 @@ fun SettingsScreen(
     var uiSettingsExpanded by rememberSaveable { mutableStateOf(true) }
     var vpnSettingsExpanded by rememberSaveable { mutableStateOf(true) }
     var coreSettingsExpanded by rememberSaveable { mutableStateOf(true) }
+    var coreSourceExpanded by rememberSaveable { mutableStateOf(false) }
     var muxSettingsExpanded by rememberSaveable { mutableStateOf(false) }
     var fragmentSettingsExpanded by rememberSaveable { mutableStateOf(false) }
     var observatorySettingsExpanded by rememberSaveable { mutableStateOf(false) }
@@ -175,6 +179,7 @@ fun SettingsScreen(
     var dnsHosts by rememberMmkvString(AppConfig.PREF_DNS_HOSTS, "")
     var coreLogLevel by rememberMmkvString(AppConfig.PREF_LOGLEVEL, "warning")
     var outboundResolveMethod by rememberMmkvString(AppConfig.PREF_OUTBOUND_DOMAIN_RESOLVE_METHOD, AppConfig.DEFAULT_OUTBOUND_DOMAIN_RESOLVE_METHOD)
+    var coreSource by rememberMmkvString(AppConfig.PREF_CORE_SOURCE, AppConfig.DEFAULT_CORE_SOURCE)
 
     var isBooted by rememberMmkvBool(AppConfig.PREF_IS_BOOTED, false)
     var delayTestUrl by rememberMmkvString(AppConfig.PREF_DELAY_TEST_URL, "")
@@ -209,6 +214,8 @@ fun SettingsScreen(
     val coreLogLevelValues = stringArrayResource(R.array.core_loglevel).toList()
     val outboundResolveEntries = stringArrayResource(R.array.outbound_domain_resolve_method).toList()
     val outboundResolveValues = stringArrayResource(R.array.outbound_domain_resolve_method_value).toList()
+    val coreSourceEntries = stringArrayResource(R.array.core_source_entries).toList()
+    val coreSourceValues = stringArrayResource(R.array.core_source_values).toList()
     val xudpQuicEntries = stringArrayResource(R.array.mux_xudp_quic_entries).toList()
     val xudpQuicValues = stringArrayResource(R.array.mux_xudp_quic_value).toList()
     val fragmentPacketsEntries = stringArrayResource(R.array.fragment_packets).toList()
@@ -501,6 +508,38 @@ fun SettingsScreen(
                     values = outboundResolveValues,
                     selectedValue = outboundResolveMethod,
                     onSelected = { outboundResolveMethod = it }
+                )
+            }
+
+            CollapsiblePreferenceGroupHeader(
+                title = stringResource(R.string.title_core_source),
+                expanded = coreSourceExpanded,
+                onExpandedChange = { coreSourceExpanded = it }
+            )
+            if (coreSourceExpanded) {
+                val context = LocalContext.current
+                val normalizedSource = CoreSourceManager.normalizeSource(coreSource)
+                SettingsListItem(
+                    title = stringResource(R.string.title_core_source),
+                    entries = coreSourceEntries,
+                    values = coreSourceValues,
+                    selectedValue = normalizedSource,
+                    onSelected = { coreSource = CoreSourceManager.normalizeSource(it) }
+                )
+                SettingsMenuItem(
+                    title = stringResource(R.string.title_core_built_in, BuildConfig.CORE_SOURCE),
+                    subtitle = stringResource(R.string.summary_pref_core_source),
+                    onClick = { }
+                )
+                SettingsMenuItem(
+                    title = stringResource(R.string.title_core_open_releases),
+                    subtitle = CoreSourceManager.releasesPageUrl(normalizedSource),
+                    onClick = { Utils.openUri(context, CoreSourceManager.releasesPageUrl(normalizedSource)) }
+                )
+                SettingsMenuItem(
+                    title = stringResource(R.string.title_core_open_releases),
+                    subtitle = CoreSourceManager.xrayCoreReleasesUrl(normalizedSource),
+                    onClick = { Utils.openUri(context, CoreSourceManager.xrayCoreReleasesUrl(normalizedSource)) }
                 )
             }
 

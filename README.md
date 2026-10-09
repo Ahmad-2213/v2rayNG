@@ -1,5 +1,14 @@
 # v2rayNG
 
+> Fork note: this is [Ahmad-2213/v2rayNG](https://github.com/Ahmad-2213/v2rayNG), a public fork of [2dust/v2rayNG](https://github.com/2dust/v2rayNG).
+> It keeps the original app name, package (`com.v2ray.ang`), and upstream merge path, and adds a **Core source** selector in Settings:
+> - Official: `2dust/AndroidLibXrayLite` (built from `XTLS/Xray-core`)
+> - Ahmad-2213: `Ahmad-2213/AndroidLibXrayLite` (built from [Ahmad-2213/Xray-core](https://github.com/Ahmad-2213/Xray-core))
+>
+> The core is baked into the APK at build time. Use `gh workflow run build.yml -f core_source=<repo> -f release_tag=<tag>`
+> to publish official-core and Ahmad-core APKs. The About screen shows the baked-in `BuildConfig.CORE_SOURCE`.
+> See `.github/workflows/sync-core.yml` for daily core freshness checks.
+
 A V2Ray client for Android, support [Xray core](https://github.com/XTLS/Xray-core) and [v2fly core](https://github.com/v2fly/v2ray-core)
 
 [![API](https://img.shields.io/badge/API-24%2B-yellow.svg?style=flat)](https://developer.android.com/about/versions/lollipop)

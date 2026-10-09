@@ -173,6 +173,10 @@
     <string name="title_settings">সেটিংস</string>
     <string name="title_advanced">এডভান্সড সেটিংস</string>
     <string name="title_core_settings">কোর সেটিংস</string>
+    <string name="title_core_source">Core source</string>
+    <string name="summary_pref_core_source">Choose Official or Ahmad-2213 core. The core is baked into the APK at build time; installing an APK built with the other source is required to switch.</string>
+    <string name="title_core_built_in">Built-in core: %1$s</string>
+    <string name="title_core_open_releases">Open core releases page</string>
     <string name="title_vpn_settings">VPN সেটিংস</string>
     <string name="title_pref_per_app_proxy">প্রতি-অ্যাপ প্রক্সি</string>
     <string name="summary_pref_per_app_proxy">সাধারণ: নির্বাচিত অ্যাপ প্রক্সি ব্যবহার করে, অনির্বাচিত অ্যাপ সরাসরি সংযুক্ত হয়;\nবাইপাস মোড: নির্বাচিত অ্যাপ সরাসরি সংযুক্ত হয়, অনির্বাচিত অ্যাপ প্রক্সি ব্যবহার করে।\nযেসব অ্যাপ প্রক্সি ব্যবহার করবে, সেগুলি স্বয়ংক্রিয়ভাবে নির্বাচনের বিকল্পটি মেনুতে আছে।</string>

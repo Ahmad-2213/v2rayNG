@@ -81,6 +81,7 @@ object AppConfig {
     const val PREF_IS_BOOTED = "pref_is_booted"
     const val PREF_CHECK_UPDATE_PRE_RELEASE = "pref_check_update_pre_release"
     const val PREF_GEO_FILES_SOURCES = "pref_geo_files_sources"
+    const val PREF_CORE_SOURCE = "pref_core_source"
     const val PREF_USE_HEV_TUNNEL = "pref_use_hev_tunnel_v2"
     const val PREF_HEV_TUNNEL_LOGLEVEL = "pref_hev_tunnel_loglevel"
     const val PREF_HEV_TUNNEL_RW_TIMEOUT = "pref_hev_tunnel_rw_timeout_v2"
@@ -343,6 +344,18 @@ object AppConfig {
         "Loyalsoldier/v2ray-rules-dat",
         "runetfreedom/russia-v2ray-rules-dat",
         "Chocolate4U/Iran-v2ray-rules"
+    )
+
+    /** Selectable core (AAR) sources. Values must match R.array.core_source_values. */
+    const val CORE_SOURCE_OFFICIAL = "2dust/AndroidLibXrayLite"
+    const val CORE_SOURCE_AHMAD_LIB = "Ahmad-2213/AndroidLibXrayLite"
+    const val CORE_XRAY_OFFICIAL = "XTLS/Xray-core"
+    const val CORE_XRAY_AHMAD = "Ahmad-2213/Xray-core"
+    const val DEFAULT_CORE_SOURCE = CORE_SOURCE_OFFICIAL
+
+    val CORE_SOURCES = arrayListOf(
+        CORE_SOURCE_OFFICIAL,
+        CORE_SOURCE_AHMAD_LIB
     )
 
     val BUILTIN_OUTBOUND_TAGS = setOf(

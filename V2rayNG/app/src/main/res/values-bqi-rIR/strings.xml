@@ -173,6 +173,10 @@
     <string name="title_settings">سامووا</string>
     <string name="title_advanced">سامووا پؽش رئڌه</string>
     <string name="title_core_settings">سامووا هسته</string>
+    <string name="title_core_source">Core source</string>
+    <string name="summary_pref_core_source">Choose Official or Ahmad-2213 core. The core is baked into the APK at build time; installing an APK built with the other source is required to switch.</string>
+    <string name="title_core_built_in">Built-in core: %1$s</string>
+    <string name="title_core_open_releases">Open core releases page</string>
     <string name="title_vpn_settings">سامووا VPN</string>
     <string name="title_pref_per_app_proxy">پروکسی و ری برنومه</string>
     <string name="summary_pref_per_app_proxy">پوی وولاتی: برنومه پسند وابیڌه وا ی پروکسی منپیز ابۊ، برنومه پسند نوابیڌه موستقیمن منپیز ابۊ.\nحالت دور زیڌن: برنومه پسند وابیڌه موستقیمن منپیز ابۊ، برنومه پسند نوابیڌه وا ی پروکسی منپیز ابۊ.\nپسند خوتکار برنومه یلی ک وا ی پروکسی منپیز ابۊن من نومگه امکووݩ پذیر هڌ.</string>

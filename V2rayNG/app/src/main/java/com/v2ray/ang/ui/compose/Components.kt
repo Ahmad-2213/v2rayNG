@@ -245,6 +245,7 @@ fun NavigationBarsBottomPadding(): PaddingValues {
 fun VersionInfoBlock(
     versionText: String,
     appIdText: String? = null,
+    extraText: String? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -257,6 +258,10 @@ fun VersionInfoBlock(
         if (appIdText != null) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = appIdText, style = MaterialTheme.typography.bodySmall)
+        }
+        if (extraText != null) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = extraText, style = MaterialTheme.typography.bodySmall)
         }
     }
 }

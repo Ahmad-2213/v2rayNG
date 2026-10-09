@@ -173,6 +173,10 @@
     <string name="title_settings">Cài đặt</string>
     <string name="title_advanced">Cài đặt nâng cao</string>
     <string name="title_core_settings">Cài đặt lõi</string>
+    <string name="title_core_source">Core source</string>
+    <string name="summary_pref_core_source">Choose Official or Ahmad-2213 core. The core is baked into the APK at build time; installing an APK built with the other source is required to switch.</string>
+    <string name="title_core_built_in">Built-in core: %1$s</string>
+    <string name="title_core_open_releases">Open core releases page</string>
     <string name="title_vpn_settings">Cài đặt VPN</string>
     <string name="title_pref_per_app_proxy">Proxy theo từng ứng dụng</string>
     <string name="summary_pref_per_app_proxy">Thông thường: ứng dụng đã chọn dùng proxy, ứng dụng chưa chọn kết nối trực tiếp;\nChế độ bỏ qua: ứng dụng đã chọn kết nối trực tiếp, ứng dụng chưa chọn dùng proxy.\nTrong trình đơn có tùy chọn tự động chọn các ứng dụng sẽ dùng proxy.</string>

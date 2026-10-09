@@ -6,6 +6,14 @@ on:
       release_tag:
         required: false
         type: string
+      core_source:
+        description: 'Core AAR repo (must match R.array.core_source_values)'
+        required: false
+        default: '2dust/AndroidLibXrayLite'
+        type: choice
+        options:
+          - 2dust/AndroidLibXrayLite
+          - Ahmad-2213/AndroidLibXrayLite
   push:
     branches:
       - master
@@ -64,18 +72,30 @@ jobs:
       run: |
         cp -r ${{ github.workspace }}/libs ${{ github.workspace }}/V2rayNG/app
 
-    - name: Fetch AndroidLibXrayLite tag
+    - name: Resolve core source and tag
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
-        pushd AndroidLibXrayLite
-        CURRENT_TAG=$(git describe --tags --abbrev=0)
-        echo "Current tag in this repo: $CURRENT_TAG"
+        CORE_SOURCE='${{ inputs.core_source }}'
+        if [ -z "$CORE_SOURCE" ]; then
+          CORE_SOURCE='2dust/AndroidLibXrayLite'
+        fi
+        echo "CORE_SOURCE=$CORE_SOURCE" >> $GITHUB_ENV
+        echo "Selected core source: $CORE_SOURCE"
+        if [ "$CORE_SOURCE" = 'Ahmad-2213/AndroidLibXrayLite' ]; then
+          CURRENT_TAG=$(gh release view --repo "$CORE_SOURCE" --json tagName --jq .tagName)
+        else
+          pushd AndroidLibXrayLite
+          CURRENT_TAG=$(git describe --tags --abbrev=0)
+          popd
+        fi
+        echo "Current tag in selected core repo: $CURRENT_TAG"
         echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
-        popd
 
     - name: Download libv2ray
       uses: robinraju/release-downloader@v1.13
       with:
-        repository: '2dust/AndroidLibXrayLite'
+        repository: ${{ env.CORE_SOURCE }}
         tag: ${{ env.CURRENT_TAG }}
         fileName: 'libv2ray.aar'
         out-file-path: V2rayNG/app/libs/
@@ -99,7 +119,7 @@ jobs:
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod 755 gradlew
         ./gradlew licenseFdroidReleaseReport
-        ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ steps.android_keystore.outputs.filePath }} -Pandroid.injected.signing.store.password=${{ secrets.APP_KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.APP_KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.APP_KEY_PASSWORD }}
+        ./gradlew assembleRelease -PCORE_SOURCE=${{ env.CORE_SOURCE }} -Pandroid.injected.signing.store.file=${{ steps.android_keystore.outputs.filePath }} -Pandroid.injected.signing.store.password=${{ secrets.APP_KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.APP_KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.APP_KEY_PASSWORD }}
     
     - name: Upload arm64-v8a APK
       uses: actions/upload-artifact@v7

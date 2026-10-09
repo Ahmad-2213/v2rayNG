@@ -66,6 +66,7 @@ fun AboutScreen(
     val libVersion = CoreNativeManager.getLibVersion()
     val versionText = "v${BuildConfig.VERSION_NAME} ($libVersion)"
     val appIdText = BuildConfig.APPLICATION_ID
+    val coreSourceText = stringResource(R.string.title_core_built_in, BuildConfig.CORE_SOURCE)
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
@@ -114,7 +115,8 @@ fun AboutScreen(
             )
             VersionInfoBlock(
                 versionText = versionText,
-                appIdText = appIdText
+                appIdText = appIdText,
+                extraText = coreSourceText
             )
             NavigationBarsSpacer()
         }

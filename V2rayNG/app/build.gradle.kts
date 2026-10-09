@@ -16,6 +16,12 @@ android {
         versionCode = 750
         versionName = "2.3.10"
 
+        // Baked-in core source (AAR repo). Override with -PCORE_SOURCE=Ahmad-2213/AndroidLibXrayLite.
+        // Kept as BuildConfig.CORE_SOURCE so the app can display which core an APK contains.
+        val coreSourceProp = (properties["CORE_SOURCE"] as? String)?.takeIf { it.isNotBlank() }
+            ?: "2dust/AndroidLibXrayLite"
+        buildConfigField("String", "CORE_SOURCE", "\"$coreSourceProp\"")
+
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
         splits {
             abi {

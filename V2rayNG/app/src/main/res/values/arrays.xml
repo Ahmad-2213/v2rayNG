@@ -221,5 +221,15 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="core_source_entries" translatable="false">
+        <item>Official (XTLS/Xray-core)</item>
+        <item>Ahmad-2213 (custom Xray-core)</item>
+    </string-array>
+
+    <string-array name="core_source_values" translatable="false">
+        <item>2dust/AndroidLibXrayLite</item>
+        <item>Ahmad-2213/AndroidLibXrayLite</item>
+    </string-array>
+
 
 </resources>
